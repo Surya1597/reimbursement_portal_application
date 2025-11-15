@@ -1,0 +1,88 @@
+<%= form_with model: user,
+              url: url,
+              method: method,
+              local: true,
+              data: { turbo: false } do |form| %>
+  <% if user.errors.any? %>
+    <div class="alert alert-danger">
+      <p class="fw-semibold mb-1">Please address the following:</p>
+      <ul class="mb-0">
+        <% user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row g-3">
+    <%
+      first_name_value = form.object.first_name.presence || form.object.employee_profile&.first_name
+      last_name_value = form.object.last_name.presence || form.object.employee_profile&.last_name
+      selected_department_id = form.object.profile_department_id.presence || form.object.employee_profile&.department_id
+      selected_designation = form.object.profile_designation.presence || form.object.employee_profile&.designation
+    %>
+    <div class="col-md-6">
+      <%= form.label :first_name, class: "form-label" %>
+      <%= form.text_field :first_name, class: "form-control", required: true, value: first_name_value %>
+    </div>
+    <div class="col-md-6">
+      <%= form.label :last_name, class: "form-label" %>
+      <%= form.text_field :last_name, class: "form-control", required: true, value: last_name_value %>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-1">
+    <div class="col-md-6">
+      <%= form.label :email, class: "form-label" %>
+      <%= form.email_field :email, class: "form-control", required: true %>
+    </div>
+    <div class="col-md-6">
+      <%= form.label :role, class: "form-label" %>
+      <%= form.select :role,
+                      User.roles.keys.map { |role| [role.titleize, role] },
+                      { prompt: "Select role" },
+                      class: "form-select", required: true %>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-1">
+    <div class="col-md-6">
+      <%= form.label :profile_department_id, "Department", class: "form-label" %>
+      <%= form.select :profile_department_id,
+                      options_from_collection_for_select(departments, :id, :name, selected_department_id),
+                      { prompt: "Select department" },
+                      class: "form-select", required: true %>
+    </div>
+    <div class="col-md-6">
+      <%= form.label :profile_designation, "Designation", class: "form-label" %>
+      <%= form.select :profile_designation,
+                      options_for_select(designation_options.map { |key| [key.titleize, key] }, selected_designation),
+                      { prompt: "Select designation" },
+                      class: "form-select", required: true %>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-1">
+    <div class="col-md-6">
+      <%= form.label :password, class: "form-label" %>
+      <%= form.password_field :password,
+                              class: "form-control",
+                              required: require_password,
+                              placeholder: (require_password ? nil : "Leave blank to keep current password") %>
+      <% unless require_password %>
+        <small class="text-muted">Leave blank to keep the current password.</small>
+      <% end %>
+    </div>
+    <div class="col-md-6">
+      <%= form.label :password_confirmation, class: "form-label" %>
+      <%= form.password_field :password_confirmation,
+                              class: "form-control",
+                              required: require_password %>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mt-4">
+    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+    <%= form.submit submit_label, class: "btn btn-primary" %>
+  </div>
+<% end %>
