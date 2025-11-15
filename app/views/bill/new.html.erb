@@ -1,0 +1,62 @@
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-4 text-center">Submit a new bill</h1>
+
+        <% if @bill.errors.any? %>
+          <div class="alert alert-danger">
+            <p class="mb-1 fw-semibold">We found the following issues:</p>
+            <ul class="mb-0">
+              <% @bill.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= form_with model: @bill,
+                      url: bill_index_path,
+                      local: true,
+                      html: { class: "needs-validation" },
+                      data: { turbo: false, controller: "bill-form" } do |form| %>
+          <div class="mb-3">
+            <%= form.label :amount, class: "form-label" %>
+            <div class="input-group">
+              <span class="input-group-text">₹</span>
+              <%= form.number_field :amount, class: "form-control", required: true %>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <%= form.label :bill_type, "Expense type", class: "form-label" %>
+            <%= form.select :bill_type,
+                            Bill.bill_types.keys.map { |key| [key.titleize, key] },
+                            { prompt: "Select type" },
+                            class: "form-select",
+                            required: true,
+                            data: { action: "change->bill-form#toggleReason", "bill-form-target": "select" } %>
+          </div>
+
+          <% reason_field_classes = ["mb-4"] %>
+          <% reason_field_classes << "d-none" unless @bill.bill_type == "other" %>
+          <div class="<%= reason_field_classes.join(" ") %>" data-bill-form-target="reasonField">
+            <%= form.label :other_reason, "Please provide a Valid Reason", class: "form-label" %>
+            <%= form.text_area :other_reason,
+                               class: "form-control",
+                               rows: 3,
+                               placeholder: "Describe the expense",
+                               required: (@bill.bill_type == "other"),
+                               data: { "bill-form-target": "reasonInput" } %>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= link_to "Cancel", reimbursement_dashboard_employee_index_path, class: "btn btn-outline-secondary" %>
+            <%= form.submit "Submit bill", class: "btn btn-primary flex-grow-1" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+    
