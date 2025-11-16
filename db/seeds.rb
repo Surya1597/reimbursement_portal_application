@@ -14,3 +14,9 @@ User.create!(
   password: ENV["ADMIN_USER_PASSWORD"],
   role: "admin"
 ) unless User.exists?(email: ENV["ADMIN_USER_NAME"])
+
+Department.create!(name: "Human Resources") unless Department.exists?(name: "Human Resources")
+Department.create!(name: "Finance") unless Department.exists?(name: "Finance")
+Department.create!(name: "Engineering") unless Department.exists?(name: "Engineering")
+Department.create!(name: "Marketing") unless Department.exists?(name: "Marketing")
+Department.create!(name: "Sales") unless Department.exists?(name: "Sales")
