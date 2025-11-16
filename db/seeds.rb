@@ -8,15 +8,8 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.create!(
-  name: ENV["ADMIN_USER_NAME"],
-  email: ENV["ADMIN_USER_EMAIL"],
-  password: ENV["ADMIN_USER_PASSWORD"],
-  role: "admin"
-) unless User.exists?(email: ENV["ADMIN_USER_NAME"])
-
-Department.create!(name: "Human Resources") unless Department.exists?(name: "Human Resources")
-Department.create!(name: "Finance") unless Department.exists?(name: "Finance")
-Department.create!(name: "Engineering") unless Department.exists?(name: "Engineering")
-Department.create!(name: "Marketing") unless Department.exists?(name: "Marketing")
-Department.create!(name: "Sales") unless Department.exists?(name: "Sales")
+Department.find_or_create_by(name: "Human Resources") unless Department.exists?(name: "Human Resources")
+Department.find_or_create_by(name: "Finance") unless Department.exists?(name: "Finance")
+Department.find_or_create_by(name: "Engineering") unless Department.exists?(name: "Engineering")
+Department.find_or_create_by(name: "Marketing") unless Department.exists?(name: "Marketing")
+Department.find_or_create_by(name: "Sales") unless Department.exists?(name: "Sales")
