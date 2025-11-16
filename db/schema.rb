@@ -11,9 +11,12 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2025_11_15_120000) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "bills", force: :cascade do |t|
-    t.integer "employee_profile_id", null: false
-    t.integer "reviewed_by_id"
+    t.bigint "employee_profile_id", null: false
+    t.bigint "reviewed_by_id"
     t.float "amount", null: false
     t.integer "bill_type", null: false
     t.integer "status", default: 0, null: false
@@ -32,8 +35,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_15_120000) do
   end
 
   create_table "employee_profiles", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "department_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "department_id", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.integer "designation", null: false
