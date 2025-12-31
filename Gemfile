@@ -57,4 +57,4 @@ group :test do
 end
 
 # For Authentication and Authorization
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.21"
